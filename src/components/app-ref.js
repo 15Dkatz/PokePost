@@ -30,10 +30,11 @@ module.exports = React.createClass({
   listenForItems(ref) {
     ref.on('value', snap => {
       let items = [];
+      let {item_title, author} = child.val();
       snap.forEach(child => {
         items.push({
-          item_title: child.val().item_title,
-          author: child.val().author
+          item_title,
+          author
         })
       })
       this.setState({dataSource: ds.cloneWithRows(items)});
