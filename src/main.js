@@ -8,16 +8,17 @@ import signUp from './components/auth/signUp';
 import chooseName from './components/auth/chooseName';
 import forgotPassword from './components/auth/forgot-password';
 
-import topics from './components/topics';
-import topicDetail from './components/topic-detail';
+import app from './components/app';
+import appRef from './components/app-ref';
 
 const routes = {
   signIn,
   signUp,
   chooseName,
   forgotPassword,
-  topics,
-  topicDetail,
+
+  app,
+  appRef
 }
 
 module.exports = React.createClass({
@@ -32,15 +33,16 @@ module.exports = React.createClass({
 
   renderScene(route, navigator) {
     let Component = routes[route.name];
-    let {displayName, title, author, row_uid} = route;
+    let {displayName, uid, placeholder, title} = route;
 
     return (
       <Component
         navigator={navigator}
         displayName={displayName}
+        uid={uid}
+        //app-ref
         title={title}
-        author={author}
-        row_uid={row_uid}
+        placeholder={placeholder}
       />
     )
   }

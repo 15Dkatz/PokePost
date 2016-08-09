@@ -1,68 +1,77 @@
 import { StyleSheet } from 'react-native';
 
-const blue = '#90caf9';
-const navy = '#1a237e';
-const white = '#fff';
-const black = '#000';
+const dark_black = '#202020';
+const white = '#eeeeee';
+const dark_white = '#e0e0e0';
+const light_black = '#37474f';
+
+const font = 'Avenir';
 
 module.exports = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     padding: 40,
-    backgroundColor: blue,
+    backgroundColor: dark_black,
   },
   input: {
     backgroundColor: white,
     height: 50,
-    borderColor: black,
-    borderWidth: 1,
     borderRadius: 5,
     margin: 2,
-    textAlign: 'center'
+    textAlign: 'center',
+    fontFamily: font,
   },
   buttonContainer: {
-    backgroundColor: white,
+    backgroundColor: dark_white,
     justifyContent: 'center',
     height: 50,
-    borderColor: black,
+    borderColor: light_black,
     borderWidth: 1,
     borderRadius: 5,
     margin: 2
   },
   button: {
-    textAlign: 'center'
+    textAlign: 'center',
+    fontFamily: font
   },
   links: {
     flexDirection: 'row',
     justifyContent: 'space-between'
   },
   link: {
-    color: navy
+    color: white,
+    fontFamily: font
   },
   feedback: {
-    textAlign: 'center'
+    textAlign: 'center',
+    fontFamily: font
   },
 
   //topics section
   flexContainer: {
     flex: 1,
-    backgroundColor: blue
+    backgroundColor: dark_black
   },
   header: {
     marginTop: 20,
     padding: 10,
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+  },
+  header_text: {
+    fontFamily: font,
+    fontSize: 20,
+    color: white
   },
   body: {
-    flex: 24,
-    paddingRight: 20,
-    paddingLeft: 20
+    flex: 24
   },
   title: {
-    textAlign: 'center'
+    textAlign: 'center',
+    color: dark_white,
+    fontFamily: font
   },
 
   //list section
@@ -71,28 +80,49 @@ module.exports = StyleSheet.create({
   },
   row: {
     alignItems: 'center',
-    backgroundColor: white,
-    borderColor: black,
+    backgroundColor: dark_white,
+    borderColor: light_black,
     borderWidth: 1,
     borderRadius: 5,
     margin: 2,
     padding: 10
   },
-  rowTitle: {
-    fontWeight: 'bold'
+
+  row_title: {
+    color: dark_black,
+    fontSize: 16,
+    fontWeight: 'bold',
+    fontFamily: font,
   },
 
-  //details section
-  detailTitle: {
-    textAlign: 'center',
-    fontSize: 20,
-    fontWeight: 'bold'
+
+  // stylings for app.js
+  section_img: {
+    flex: 1,
+    width: null,
+    height: null,
+    justifyContent: 'center',
+    opacity: 0.5,
   },
-  detailSubtitle: {
-    textAlign: 'center',
-    fontSize: 14
+  section: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
   },
-  comment: {
-    color: '#777'
+  section_title: {
+    textAlign: 'center',
+    color: 'rgba(255,255,255,1)',
+    fontFamily: font,
+    fontSize: 67,
+  },
+
+  refContainer: {
+    flex: 1,
+    backgroundColor: dark_black
+  },
+  refBody: {
+    flex: 24,
+    paddingLeft: 20,
+    paddingRight: 20
   }
 })

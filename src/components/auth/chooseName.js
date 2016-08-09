@@ -22,7 +22,7 @@ module.exports = React.createClass({
       displayName: this.state.name
     }).then(() => {
       this.props.navigator.push({
-        name: 'topics'
+        name: 'app'
       })
     })
   },

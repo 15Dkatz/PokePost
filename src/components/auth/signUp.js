@@ -4,7 +4,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet
+  AsyncStorage
 } from 'react-native';
 
 import styles from '../../styles';
@@ -24,6 +24,10 @@ module.exports = React.createClass({
     if (this.state.password == this.state.confirmPassword) {
       // do anything with creating a user
       let {email, password} = this.state;
+      let credentials = {
+        email,
+        password
+      }
       firebaseApp.auth().createUserWithEmailAndPassword(email, password)
         .catch(error => this.setState({result: error.message}));
     } else {

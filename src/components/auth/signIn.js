@@ -1,10 +1,14 @@
+// implement AsyncStorage on signIns []
+// add gym Sign background []
+// add app-ref-detail page for adding comments and flagging[]
+
 import React, { Component } from 'react';
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet
+  AsyncStorage
 } from 'react-native';
 
 import styles from '../../styles';
@@ -23,7 +27,7 @@ module.exports = React.createClass({
     firebaseApp.auth().onAuthStateChanged(user => {
       if (user) {
         console.log('user', user);
-        this.props.navigator.push({name: 'topics'});
+        this.props.navigator.push({name: 'app'});
         // navigate to our main application page.
       }
     })
@@ -31,6 +35,12 @@ module.exports = React.createClass({
 
   signIn() {
     let {email, password} = this.state;
+    let credentials = {
+      email,
+      password
+    }
+
+    AsyncStorage.setItem('credentials', JSON.stringify(credentials));
 
     firebaseApp.auth().signInWithEmailAndPassword(email, password)
       .catch(error => {

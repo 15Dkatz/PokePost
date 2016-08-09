@@ -1,57 +1,59 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
   View,
   Text,
+  TouchableOpacity,
   TextInput,
-  ListView,
-  TouchableOpacity
+  ListView
 } from 'react-native';
 
 import styles from '../styles';
-import { topicsRef } from './auth/authentication';
+import {ref} from './auth/authentication';
 
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2});
 
 module.exports = React.createClass({
   getInitialState() {
     return ({
-      comment: '',
       dataSource: ds.cloneWithRows(''),
-      commentsRef: ''
+      text: '',
+      appRef: ''
     })
   },
 
   componentDidMount() {
-    const commentsRef = topicsRef.child(this.props.row_uid).child('comments');
-    this.setState({commentsRef})
-    this.listenForItems(commentsRef);
+    const appRef = ref.child(this.props.title);
+    this.setState({appRef});
+    this.listenForItems(appRef);
   },
 
   listenForItems(ref) {
     ref.on('value', snap => {
-      let comments = [];
+      let items = [];
       snap.forEach(child => {
-        comments.push({
-          comment: child.val().comment,
+        items.push({
+          item_title: child.val().item_title,
           author: child.val().author
         })
       })
-      this.setState({dataSource: ds.cloneWithRows(comments)});
+      this.setState({dataSource: ds.cloneWithRows(items)});
     })
   },
 
-  postComment() {
-    this.state.commentsRef.push({
-      comment: this.state.comment,
-      author: this.props.displayName
+  postItem() {
+    this.state.appRef.push({
+      item_title: this.state.text,
+      author: this.props.displayName,
+      author_uid: this.props.uid,
+      timeStamp: new Date().toString()
     })
   },
 
   renderRow(data) {
     return (
       <View style={styles.row}>
-        <Text style={styles.comment}>
-          {data.comment}
+        <Text style={styles.row_title}>
+          {data.item_title}
         </Text>
         <Text>
           {data.author}
@@ -62,28 +64,22 @@ module.exports = React.createClass({
 
   render() {
     return (
-      <View style={styles.flexContainer}>
+      <View style={styles.refContainer}>
         <View style={styles.header}>
           <TouchableOpacity
             onPress={() => this.props.navigator.pop()}
           >
-            <Text style={styles.link}>
+            <Text style={styles.header_text}>
               Back
             </Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.body}>
-          <Text style={styles.detailTitle}>
-            {this.props.title}
-          </Text>
-          <Text style={styles.detailSubtitle}>
-            {this.props.author}
-          </Text>
+        <View style={styles.refBody}>
           <TextInput
             style={styles.input}
-            placeholder='Add your thoughts'
-            onChangeText={(text) => this.setState({comment: text})}
-            onEndEditing={() => this.postComment()}
+            placeholder={this.props.placeholder}
+            onChangeText={(text) => this.setState({text})}
+            onEndEditing={() => this.postItem()}
           />
           <ListView
             style={styles.list}
