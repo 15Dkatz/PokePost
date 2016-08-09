@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import {
   View,
   Text,
-  TextInput
+  TextInput,
+  ListView
 } from 'react-native';
 
 import styles from '../styles';
@@ -39,6 +40,60 @@ module.exports = React.createClass({
 		})
 	},
 
+	// make sure app ref passes the author and author_uid
+	postItem() {
+		this.state.appRef.push({
+			item_title: this.state.text,
+			author: this.props.displayName,
+			author_uid: this.props.uid,
+			timeStamp: new Date().toString()
+		})
+	},
+
+	renderRow(data) {
+		return (
+			<View style={styles.row}>
+				<Text style={styles.row_title}>
+					{data.item_title}
+				</Text>
+				<Text>
+					{data.author}
+				</Text>
+			</View>
+		)
+	},
+
+
+	render() {
+		return (
+			<View sty;e={styles.refContainer}>
+				<View style={styles.header}>
+					<TouchableOpacity
+						onPress={()=>this.props.navigator.pop()}
+					>
+						<Text style={styles.header_text}>
+							Back
+						</Text>
+					</TouchableOpacity>
+					<View style={styles.refBody}>
+						<TextInput 
+							style={styles.input}
+							// possible to have a placeholder props
+							placeholder='Add your input'
+							onChangeText={(text) => this.setState(text)}
+							onEndEditing={() => this.postItem()}
+						/>
+						<ListView 
+							style={styles.list}
+							enableEmptySections={true}
+							dataSource={this.state.dataSource}
+							renderRow={(rowData) => this.renderRow(rowData)}
+						/>
+					</View>
+				</View>
+			</View>
+		)
+	}
 	
 
   
