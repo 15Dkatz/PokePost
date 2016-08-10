@@ -17,7 +17,7 @@ module.exports = StyleSheet.create({
   input: {
     backgroundColor: white,
     height: 50,
-    borderRadius: 5,
+    borderRadius: 2,
     margin: 2,
     textAlign: 'center',
     fontFamily: font,
@@ -28,7 +28,7 @@ module.exports = StyleSheet.create({
     height: 50,
     borderColor: light_black,
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 2,
     margin: 2
   },
   button: {
@@ -83,7 +83,7 @@ module.exports = StyleSheet.create({
     backgroundColor: dark_white,
     borderColor: light_black,
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 2,
     margin: 2,
     padding: 10
   },
@@ -99,7 +99,7 @@ module.exports = StyleSheet.create({
     backgroundColor: dark_white,
     borderColor: light_black,
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 2,
     margin: 2,
     padding: 10,
     paddingRight: 0,
@@ -116,6 +116,10 @@ module.exports = StyleSheet.create({
 
   row_icon: {
     fontSize: 22
+  },
+  row_icon_right: {
+    fontSize: 32,
+    flex: 1
   },
 
   row_middle: {

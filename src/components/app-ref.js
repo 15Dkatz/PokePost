@@ -16,8 +16,10 @@ module.exports = React.createClass({
   getInitialState() {
     return ({
       dataSource: ds.cloneWithRows([]),
+      uid: '',
       text: '',
-      appRef: ''
+      appRef: '',
+      favorited: false
     })
   },
 
@@ -27,18 +29,34 @@ module.exports = React.createClass({
     this.listenForItems(appRef);
   },
 
+  setDataSource(array) {
+    let dataSource = ds.cloneWithRows(array);
+    this.setState({dataSource});
+  },
+
   listenForItems(ref) {
     ref.on('value', snap => {
       let items = [];
       snap.forEach(child => {
+        let favoritersSnap = child.val().favoriters;
+        // console.log('favoritersSnap keys', Object.values(favoritersSnap));
+        let favoritersKey = Object.values(favoritersSnap);
+        let favoriters = [];
+        favoritersKey.map(child => {
+          favoriters.push(child.uid);
+        })
+
         items.push({
           item_title: child.val().item_title,
           item_author: child.val().author,
-          key: child.getKey()
-        })
+          key: child.getKey(),
+          // favoriters
+          favoriters
+        });
       })
-      let dataSource = ds.cloneWithRows(items);
-      this.setState({dataSource});
+      // let dataSource = ds.cloneWithRows(items);
+      // this.setState({dataSource});
+      this.setDataSource(items);
     })
   },
 
@@ -67,18 +85,86 @@ module.exports = React.createClass({
     this.props.navigator.push(route);
   },
 
+  favorite(key) {
+    // actual row accessed by key
+    let rowRef = this.state.appRef.child(key).child('favoriters');
+    // use a snap of rowRef to check if this uid has already favorited
+    // if so show a full Heart
+    // else push the uid to the list.
+    let favoriter = false;
+
+    rowRef.once('value')
+      .then((snapshot) => {
+        // because each child is within to an anonymous key
+        snapshot.forEach(child => {
+          let {uid} = child.val();
+          let key = child.getKey();
+
+          if (uid == this.props.uid) {
+            favoriter = true;
+            // remove
+            // go through rowRef and if the uid is found then remove it
+            let uidRef = rowRef.child(key);
+            uidRef.remove()
+              .then(() => {
+                console.log('Remove succeeded.');
+              })
+              .catch((error) => {
+                console.log('Remove failed: ' + error.message);
+              })
+          }
+        })
+
+        if (!favoriter) {
+          rowRef.push({
+            uid: this.props.uid
+          })
+        }
+      })
+  },
+
+  in(element, array) {
+    for (let i=0; i<array.length; i++) {
+      if (array[i] == element) {
+        return true;
+      }
+    }
+    return false;
+  },
+
   renderRow(data) {
     // data.key = the firebase uid of the item
-    let {key, item_title, item_author} = data;
+    let {key, item_title, item_author, favoriters} = data;
+
+    let favorited = false;
+
+    if (this.in(this.props.uid, favoriters)) {
+      favorited = true;
+    }
+    console.log('favoriters in renderRow', favoriters);
     return (
       <View
         style={styles.row_with_icon}
       >
-        <View style={styles.row_side}>
-          <Text style={styles.row_icon}>
-            &#9825;
-          </Text>
-        </View>
+        <TouchableOpacity style={styles.row_side}
+          onPress={() => this.favorite(key)}
+        >
+            {
+              favorited ?
+                <Text style={styles.row_icon}>
+                  &#9829;
+                  {/*Heart Icon*/}
+                </Text>
+              :
+                <Text style={styles.row_icon}>
+                  &#9825;
+                  {/*Heart Icon */}
+                </Text>
+            }
+            <Text>
+              {favoriters.length}
+            </Text>
+        </TouchableOpacity>
         <TouchableOpacity
           style={styles.row_middle}
           onPress={() => this.detail(key, item_title, item_author)}
@@ -93,9 +179,9 @@ module.exports = React.createClass({
         <TouchableOpacity style={styles.row_side}
           onPress={() => this.detail(key, item_title, item_author)}
         >
-          <Text style={styles.row_icon}>
-            >
-          </Text>
+          {/*<Text style={styles.row_icon_right}>
+            &#8250;
+          </Text>*/}
         </TouchableOpacity>
       </View>
     )
