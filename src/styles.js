@@ -81,8 +81,6 @@ module.exports = StyleSheet.create({
   row: {
     alignItems: 'center',
     backgroundColor: dark_white,
-    borderColor: light_black,
-    borderWidth: 1,
     borderRadius: 2,
     margin: 2,
     padding: 10
@@ -92,13 +90,12 @@ module.exports = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     fontFamily: font,
+    textAlign: 'center'
   },
   row_with_icon: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: dark_white,
-    borderColor: light_black,
-    borderWidth: 1,
     borderRadius: 2,
     margin: 2,
     padding: 10,

@@ -29,20 +29,18 @@ module.exports = React.createClass({
     this.listenForItems(appRef);
   },
 
-  setDataSource(array) {
-    let dataSource = ds.cloneWithRows(array);
-    this.setState({dataSource});
-  },
-
   listenForItems(ref) {
     ref.on('value', snap => {
       let items = [];
       snap.forEach(child => {
         let favoritersSnap = child.val().favoriters;
         // console.log('favoritersSnap keys', Object.values(favoritersSnap));
-        let favoritersKey = Object.values(favoritersSnap);
+        let favoritersKeys = [];
+        if (favoritersSnap) {
+          favoritersKeys = Object.values(favoritersSnap);
+        }
         let favoriters = [];
-        favoritersKey.map(child => {
+        favoritersKeys.map(child => {
           favoriters.push(child.uid);
         })
 
@@ -50,13 +48,11 @@ module.exports = React.createClass({
           item_title: child.val().item_title,
           item_author: child.val().author,
           key: child.getKey(),
-          // favoriters
           favoriters
         });
       })
-      // let dataSource = ds.cloneWithRows(items);
-      // this.setState({dataSource});
-      this.setDataSource(items);
+      let dataSource = ds.cloneWithRows(items);
+      this.setState({dataSource});
     })
   },
 
@@ -70,12 +66,14 @@ module.exports = React.createClass({
   },
 
   detail(key, item_title, item_author) {
-    let {displayName, section_title} = this.props;
+    let {uid, displayName, section_title} = this.props;
     let route = {
       name: 'appRefDetail',
       // uid of the specific item
+
       author_uid: this.props.uid,
       displayName,
+      uid,
       // title of section as in TIPS, JOKES, or QUESTIONS -> Change to section_title
       section_title,
       ref_uid: key,
@@ -103,7 +101,6 @@ module.exports = React.createClass({
           if (uid == this.props.uid) {
             favoriter = true;
             // remove
-            // go through rowRef and if the uid is found then remove it
             let uidRef = rowRef.child(key);
             uidRef.remove()
               .then(() => {

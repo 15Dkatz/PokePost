@@ -1,5 +1,8 @@
 // flagging
 
+// FIGURE OUT WHY FLAGGING ISNT REAL TIME. NEED TO ADD TO LISTENER
+// CHECK if POPTOROUTE works
+
 import React, {Component} from 'react';
 import {
   View,
@@ -19,16 +22,22 @@ module.exports = React.createClass({
 		return ({
 			dataSource: ds.cloneWithRows([]),
 			text: '',
-			detailRef: ''
+			detailRef: '',
+      baseRef: '',
+      flagged: false,
+      flagsLength: 0
 		})
 	},
+
 
 	componentDidMount() {
     console.log('ref_uid', this.props.ref_uid);
 		// this passed props is the uid of the ref that
 		// make sure that app-ref passes the row_uid
-		const detailRef = ref.child(this.props.section_title).child(this.props.ref_uid).child('comments');
-		this.setState({detailRef})
+    const baseRef = ref.child(this.props.section_title).child(this.props.ref_uid);
+		const detailRef = baseRef.child('comments');
+  	this.setState({detailRef, baseRef});
+    this.flag(false);
 		this.listenForItems(detailRef);
 	},
 
@@ -70,12 +79,81 @@ module.exports = React.createClass({
 		)
 	},
 
-  flag() {
-    console.log('flagging');
+  flag(active) {
+    // why does it take 2 presses to work?
+
+    // launch a whole new flagging request page
+    let flagsRef = ref.child(this.props.section_title).child(this.props.ref_uid).child('flags');
+
+    let flagger = false;
+    let flagsLength = 0;
+
+    flagsRef.once('value', snapshot => {
+      snapshot.forEach(child => {
+        let {uid} = child.val();
+        let key = child.getKey();
+
+        flagsLength++;
+
+        if (uid == this.props.uid) {
+          flagger = true;
+          // remove
+          this.setState({flagged: true});
+          if (active) {
+            this.setState({flagged: false});
+            let uidRef = flagsRef.child(key);
+            flagsLength--;
+            uidRef.remove()
+              .then(() => {
+                console.log('Remove succeeded.');
+              })
+              .catch((error) => {
+                console.log('Remove failed: ' + error.message);
+              })
+          }
+        }
+        this.setState({flagsLength});
+      })
+
+      if (!flagger) {
+        if (active) {
+          flagsRef.push({
+            uid: this.props.uid
+          })
+          flagsLength++;
+          this.setState({
+            flagged: true,
+            flagsLength
+          })
+        }
+      }
+    })
+    // once the flags length extends past 5, remove the ref and popToApp.
+
+    if (this.state.flagsLength > 4) {
+      let flaggedRef = ref.child(this.props.section_title).child(this.props.ref_uid);
+      flaggedRef.remove()
+        .then(() => {
+          console.log('Remove succeeded.');
+          // pop to app
+          // FIGURE OUT A BETTER METHOD THAN POP TO topics
+          this.props.navigator.popToRoute({
+            name: 'app'
+          });
+        })
+        .catch((error) => {
+          // convert to template string
+          console.log(`Remove failed: ${error.message}`);
+        })
+    }
+
+
   },
 
 
 	render() {
+    // if this.props.uid is amongst the flaggers, then set button to unflag
+
 		return (
 			<View style={styles.refContainer}>
 				<View style={styles.header}>
@@ -87,10 +165,10 @@ module.exports = React.createClass({
 						</Text>
 					</TouchableOpacity>
           <TouchableOpacity
-						onPress={()=>this.flag()}
+						onPress={()=>this.flag(true)}
 					>
 						<Text style={styles.header_text}>
-							Flag
+							{this.state.flagged ? 'Unflag' : 'Flag'} {this.state.flagsLength}/5
 						</Text>
 					</TouchableOpacity>
         </View>
