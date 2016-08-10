@@ -124,5 +124,17 @@ module.exports = StyleSheet.create({
     flex: 24,
     paddingLeft: 20,
     paddingRight: 20
+  },
+
+  detail_title: {
+    color: white,
+    fontFamily: font,
+    textAlign: 'center',
+    fontSize: 20
+  },
+  detail_subtitle: {
+    color: dark_white,
+    fontFamily: font,
+    textAlign: 'center'
   }
 })

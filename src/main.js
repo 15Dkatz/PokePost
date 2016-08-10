@@ -10,6 +10,7 @@ import forgotPassword from './components/auth/forgot-password';
 
 import app from './components/app';
 import appRef from './components/app-ref';
+import appRefDetail from './components/app-ref-detail';
 
 const routes = {
   signIn,
@@ -18,7 +19,8 @@ const routes = {
   forgotPassword,
 
   app,
-  appRef
+  appRef,
+  appRefDetail
 }
 
 module.exports = React.createClass({
@@ -33,7 +35,7 @@ module.exports = React.createClass({
 
   renderScene(route, navigator) {
     let Component = routes[route.name];
-    let {displayName, uid, placeholder, title} = route;
+    let {displayName, uid, placeholder, section_title, ref_uid, author_uid, item_title, item_author} = route;
 
     return (
       <Component
@@ -41,8 +43,14 @@ module.exports = React.createClass({
         displayName={displayName}
         uid={uid}
         //app-ref
-        title={title}
+        section_title={section_title}
         placeholder={placeholder}
+        //app-ref-detail
+        ref_uid={ref_uid}
+        author_uid={author_uid}
+
+        item_title={item_title}
+        item_author={item_author}
       />
     )
   }

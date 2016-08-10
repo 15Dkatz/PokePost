@@ -68,7 +68,7 @@ module.exports = React.createClass({
       name: 'appRef',
       displayName,
       uid,
-      title,
+      section_title: title,
       placeholder
     })
   },

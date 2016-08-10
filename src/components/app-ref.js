@@ -15,14 +15,14 @@ const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2});
 module.exports = React.createClass({
   getInitialState() {
     return ({
-      dataSource: ds.cloneWithRows(''),
+      dataSource: ds.cloneWithRows([]),
       text: '',
       appRef: ''
     })
   },
 
   componentDidMount() {
-    const appRef = ref.child(this.props.title);
+    const appRef = ref.child(this.props.section_title);
     this.setState({appRef});
     this.listenForItems(appRef);
   },
@@ -30,11 +30,11 @@ module.exports = React.createClass({
   listenForItems(ref) {
     ref.on('value', snap => {
       let items = [];
-      let {item_title, author} = child.val();
       snap.forEach(child => {
         items.push({
-          item_title,
-          author
+          item_title: child.val().item_title,
+          item_author: child.val().author,
+          key: child.getKey()
         })
       })
       this.setState({dataSource: ds.cloneWithRows(items)});
@@ -44,22 +44,45 @@ module.exports = React.createClass({
   postItem() {
     this.state.appRef.push({
       item_title: this.state.text,
-      author: this.props.displayName,
+      item_author: this.props.displayName,
       author_uid: this.props.uid,
       timeStamp: new Date().toString()
     })
   },
 
+  detail(key, item_title, item_author) {
+    let {displayName, section_title} = this.props;
+    let route = {
+      name: 'appRefDetail',
+      // uid of the specific item
+      author_uid: this.props.uid,
+      displayName,
+      // title of section as in TIPS, JOKES, or QUESTIONS -> Change to section_title
+      section_title,
+      ref_uid: key,
+      item_title,
+      item_author
+    };
+    console.log('appRefDetail route', route);
+
+    this.props.navigator.push(route);
+  },
+
   renderRow(data) {
+    // data.key = the firebase uid of the item
+    let {key, item_title, item_author} = data;
     return (
-      <View style={styles.row}>
+      <TouchableOpacity
+        style={styles.row}
+        onPress={() => this.detail(key, item_title, item_author)}
+      >
         <Text style={styles.row_title}>
           {data.item_title}
         </Text>
         <Text>
-          {data.author}
+          {data.item_author}
         </Text>
-      </View>
+      </TouchableOpacity>
     )
   },
 
