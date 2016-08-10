@@ -2,6 +2,7 @@ import { StyleSheet } from 'react-native';
 
 const dark_black = '#202020';
 const white = '#eeeeee';
+const red = '#c62828';
 const dark_white = '#e0e0e0';
 const light_black = '#37474f';
 
@@ -42,6 +43,9 @@ module.exports = StyleSheet.create({
   link: {
     color: white,
     fontFamily: font
+  },
+  danger: {
+    color: red,
   },
   feedback: {
     textAlign: 'center',
@@ -90,7 +94,6 @@ module.exports = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     fontFamily: font,
-    textAlign: 'center'
   },
   row_with_icon: {
     flexDirection: 'row',

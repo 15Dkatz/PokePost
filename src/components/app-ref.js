@@ -46,11 +46,12 @@ module.exports = React.createClass({
 
         items.push({
           item_title: child.val().item_title,
-          item_author: child.val().author,
+          item_author: child.val().item_author,
           key: child.getKey(),
           favoriters
         });
       })
+      // figure out error..
       let dataSource = ds.cloneWithRows(items);
       this.setState({dataSource});
     })

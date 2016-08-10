@@ -167,7 +167,7 @@ module.exports = React.createClass({
           <TouchableOpacity
 						onPress={()=>this.flag(true)}
 					>
-						<Text style={styles.header_text}>
+						<Text style={[styles.header_text, styles.danger]}>
 							{this.state.flagged ? 'Unflag' : 'Flag'} {this.state.flagsLength}/5
 						</Text>
 					</TouchableOpacity>
