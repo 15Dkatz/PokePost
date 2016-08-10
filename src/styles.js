@@ -87,12 +87,42 @@ module.exports = StyleSheet.create({
     margin: 2,
     padding: 10
   },
-
   row_title: {
     color: dark_black,
     fontSize: 16,
     fontWeight: 'bold',
     fontFamily: font,
+  },
+  row_with_icon: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: dark_white,
+    borderColor: light_black,
+    borderWidth: 1,
+    borderRadius: 5,
+    margin: 2,
+    padding: 10,
+    paddingRight: 0,
+    paddingLeft: 0
+  },
+
+  row_side: {
+    flex: 1,
+    alignItems: 'center',
+    // uncomment for debugging the size
+    // borderColor: dark_black,
+    // borderWidth: 1
+  },
+
+  row_icon: {
+    fontSize: 22
+  },
+
+  row_middle: {
+    flex: 5,
+    alignItems: 'center',
+    // borderColor: dark_black,
+    // borderWidth: 1
   },
 
 

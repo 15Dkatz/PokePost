@@ -66,9 +66,9 @@ module.exports = React.createClass({
 
     this.props.navigator.push({
       name: 'appRef',
+      section_title: title,
       displayName,
       uid,
-      section_title: title,
       placeholder
     })
   },

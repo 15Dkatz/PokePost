@@ -37,7 +37,8 @@ module.exports = React.createClass({
           key: child.getKey()
         })
       })
-      this.setState({dataSource: ds.cloneWithRows(items)});
+      let dataSource = ds.cloneWithRows(items);
+      this.setState({dataSource});
     })
   },
 
@@ -63,8 +64,6 @@ module.exports = React.createClass({
       item_title,
       item_author
     };
-    console.log('appRefDetail route', route);
-
     this.props.navigator.push(route);
   },
 
@@ -72,17 +71,33 @@ module.exports = React.createClass({
     // data.key = the firebase uid of the item
     let {key, item_title, item_author} = data;
     return (
-      <TouchableOpacity
-        style={styles.row}
-        onPress={() => this.detail(key, item_title, item_author)}
+      <View
+        style={styles.row_with_icon}
       >
-        <Text style={styles.row_title}>
-          {data.item_title}
-        </Text>
-        <Text>
-          {data.item_author}
-        </Text>
-      </TouchableOpacity>
+        <View style={styles.row_side}>
+          <Text style={styles.row_icon}>
+            &#9825;
+          </Text>
+        </View>
+        <TouchableOpacity
+          style={styles.row_middle}
+          onPress={() => this.detail(key, item_title, item_author)}
+        >
+          <Text style={styles.row_title}>
+            {data.item_title}
+          </Text>
+          <Text>
+            {data.item_author}
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.row_side}
+          onPress={() => this.detail(key, item_title, item_author)}
+        >
+          <Text style={styles.row_icon}>
+            >
+          </Text>
+        </TouchableOpacity>
+      </View>
     )
   },
 

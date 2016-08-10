@@ -42,7 +42,8 @@ module.exports = React.createClass({
 					author
 				})
 			})
-			this.setState({dataSource: ds.cloneWithRows(items)});
+      let dataSource = ds.cloneWithRows(items);
+			this.setState({dataSource});
 		})
 	},
 
