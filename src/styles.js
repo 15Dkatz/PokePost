@@ -49,7 +49,8 @@ module.exports = StyleSheet.create({
   },
   feedback: {
     textAlign: 'center',
-    fontFamily: font
+    fontFamily: font,
+    color: dark_white
   },
 
   //topics section

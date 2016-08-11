@@ -1,3 +1,7 @@
+// Give the user the option to ORGANIZE appRefs
+// either by timestamp, or either by likes.
+
+
 import React from 'react';
 import {
   View,
@@ -51,7 +55,7 @@ module.exports = React.createClass({
           favoriters
         });
       })
-      // figure out error..
+      // figure out warningx..
       let dataSource = ds.cloneWithRows(items);
       this.setState({dataSource});
     })
