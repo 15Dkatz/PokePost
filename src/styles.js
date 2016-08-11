@@ -94,6 +94,7 @@ module.exports = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     fontFamily: font,
+    marginBottom: 5
   },
   row_with_icon: {
     flexDirection: 'row',

@@ -50,6 +50,9 @@ module.exports = React.createClass({
 					item_title,
 					author
 				})
+        // possible update flags with the listener for real-time flagging
+        // however, at the moment, it seems nice that you leave it stagnant
+        // so as not to confuse the user
 			})
       let dataSource = ds.cloneWithRows(items);
 			this.setState({dataSource});
@@ -80,8 +83,6 @@ module.exports = React.createClass({
 	},
 
   flag(active) {
-    // why does it take 2 presses to work?
-
     // launch a whole new flagging request page
     let flagsRef = ref.child(this.props.section_title).child(this.props.ref_uid).child('flags');
 
@@ -128,18 +129,17 @@ module.exports = React.createClass({
         }
       }
     })
-    // once the flags length extends past 5, remove the ref and popToApp.
 
-    if (this.state.flagsLength > 4) {
+    // once the flags length extends past 5, remove the ref and popToApp.
+    if (flagsLength > 4) {
       let flaggedRef = ref.child(this.props.section_title).child(this.props.ref_uid);
       flaggedRef.remove()
         .then(() => {
           console.log('Remove succeeded.');
-          // pop to app
-          // FIGURE OUT A BETTER METHOD THAN POP TO topics
-          this.props.navigator.popToRoute({
-            name: 'app'
-          });
+          // pop to app which should always be at index: 1
+          let route = this.props.navigator.getCurrentRoutes()[1];
+          this.props.navigator.popToRoute(route);
+          // this.props.navigator.pop();
         })
         .catch((error) => {
           // convert to template string

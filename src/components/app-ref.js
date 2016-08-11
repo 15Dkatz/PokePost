@@ -139,7 +139,6 @@ module.exports = React.createClass({
     if (this.in(this.props.uid, favoriters)) {
       favorited = true;
     }
-    console.log('favoriters in renderRow', favoriters);
     return (
       <View
         style={styles.row_with_icon}
